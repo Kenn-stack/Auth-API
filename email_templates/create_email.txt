@@ -1,0 +1,8 @@
+Thank you for joining [Company Name].
+
+Please use the OTP below to activate your account
+
+{{activation_code}}
+
+
+Team [Company Name]

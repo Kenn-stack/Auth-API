@@ -8,6 +8,9 @@ from django.contrib.auth.models import  PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
+from.tokens import generate_user_id
+
+
 
 
 class UserManager(BaseUserManager):
@@ -24,6 +27,7 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using = self._db)
+
         return user
 
     def create_user(self, email, password=None, **extra_fields):
@@ -47,7 +51,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    user_id = models.CharField(max_length=16, primary_key=True, default=generate_user_id(16))
     email = models.EmailField(_('email address'), unique=True)
+    otp = models.CharField(max_length=6, blank=True)
     
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
@@ -65,24 +71,24 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name= 'profile', on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=11)
+# class Profile(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name= 'profile', on_delete=models.CASCADE)
+#     first_name = models.CharField(max_length=100)
+#     last_name = models.CharField(max_length=100)
+#     phone = models.CharField(max_length=11)
 
 
-    def get_full_name(self):
-        """
-        Returns the first_name plus the last_name, with a space in-between
-        """
-        full_name = '%s %s' %(self.first_name, self.last_name)
-        return full_name.strip()
+#     def get_full_name(self):
+#         """
+#         Returns the first_name plus the last_name, with a space in-between
+#         """
+#         full_name = '%s %s' %(self.first_name, self.last_name)
+#         return full_name.strip()
 
-    def get_short_name(self):
-        """
-        Returns the first_name of the user
-        """
-        return self.first_name
+#     def get_short_name(self):
+#         """
+#         Returns the first_name of the user
+#         """
+#         return self.first_name
 
 
