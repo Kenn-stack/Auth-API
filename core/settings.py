@@ -42,10 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    # 'rest_framework.authtoken',
-    # 'djoser',
     'coreapi', # Coreapi for coreapi documentation
     'drf_yasg', # drf_yasg fro Swagger documentation
+    'anymail',
 ]
 
 MIDDLEWARE = [
@@ -135,12 +134,12 @@ AUTH_USER_MODEL = 'Auth.User'
 
 
 
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+# EMAIL_HOST = config('EMAIL_HOST')
+# EMAIL_PORT = config('EMAIL_PORT')
+# EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 
 
@@ -156,5 +155,18 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELD' : 'user_id',
 }
+
+
+
+ANYMAIL = {
+
+    "MAILERSEND_API_TOKEN": config('MAILERSEND_API_TOKEN'),
+    "MAILERSEND_SENDER_DOMAIN": config('MAILERSEND_SENDER_DOMAIN'),  # your MailerSend domain, if needed
+}
+
+
+EMAIL_BACKEND = "anymail.backends.mailersend.EmailBackend"
+DEFAULT_FROM_EMAIL = "info@samaha.com.ng"  # if you don't already have this in settings
+SERVER_EMAIL = "info-server@samaha.com.ng"  # ditto (default from-email for Django errors)
 
 
